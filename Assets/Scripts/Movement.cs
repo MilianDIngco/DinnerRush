@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class Movement : MonoBehaviour
 {
+    public bool vr = false;
     public InputActionAsset controls;
     public GameObject camera;
 
@@ -15,7 +16,6 @@ public class Movement : MonoBehaviour
     private InputAction actionInteract;
     private InputAction actionInteractLeft;
     private InputAction actionInteractRight;
-    private InputAction actionJump;
 
     public CharacterController characterController;
     float speed = 4f;
@@ -28,8 +28,10 @@ public class Movement : MonoBehaviour
     float cameraAngle;
 
     // VR
-    Vector3 lookDirection;
+    Quaternion lookDirection;
     Vector3 headPos;
+    Vector3 eulerAngles;
+    float pitch;
 
     public void Awake()
     {
@@ -40,7 +42,9 @@ public class Movement : MonoBehaviour
         actionInteract = controls.FindAction("Interact");
         actionInteractLeft = controls.FindAction("InteractLeft");
         actionInteractRight = controls.FindAction("InteractRight");
-        actionJump = controls.FindAction("Jump");
+
+        Cursor.visible = false;
+        Screen.lockCursor = true;
     }
 
     public void OnEnable()
@@ -52,7 +56,6 @@ public class Movement : MonoBehaviour
         actionInteract.Enable();
         actionInteractLeft.Enable();
         actionInteractRight.Enable();
-        actionJump.Enable();
     }
 
     public void OnDisable()
@@ -64,33 +67,47 @@ public class Movement : MonoBehaviour
         actionInteract.Disable();
         actionInteractLeft.Disable();
         actionInteractRight.Disable();
-        actionJump.Disable();
     }
 
     public void Update()
     {
+        //transform.position = new Vector3(transform.position.x, 1.5f, transform.position.z);
+
         // Movement
         moveInput = actionMove.ReadValue<Vector2>();
         moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
         moveDirection = transform.TransformDirection(moveDirection);
         characterController.Move(moveDirection * speed * Time.deltaTime);
 
-        // Camera movement (mouse/gamepad)
-        lookInput = actionLook.ReadValue<Vector2>();
-        transform.Rotate(Vector3.up, (lookInput.x * mouseSensitivity * Time.deltaTime));
-        cameraAngle -= lookInput.y * mouseSensitivity * Time.deltaTime;
-        cameraAngle = Mathf.Clamp(cameraAngle, -80, 80);
-        camera.transform.localRotation = Quaternion.Euler(cameraAngle, 0, 0);
-
-        // Camera movement (VR)
-            // Rotation
-        lookDirection = actionLook3D.ReadValue<Vector3>();
-        if (lookDirection != Vector3.zero)
+        if (!vr)
         {
-            camera.transform.rotation = Quaternion.LookRotation(lookDirection);
+            // Camera movement (mouse/gamepad)
+            lookInput = actionLook.ReadValue<Vector2>();
+            if (lookInput != Vector2.zero)
+            {
+                transform.Rotate(Vector3.up, (lookInput.x * mouseSensitivity * Time.deltaTime));
+                cameraAngle -= lookInput.y * mouseSensitivity * Time.deltaTime;
+                cameraAngle = Mathf.Clamp(cameraAngle, -80, 80);
+                camera.transform.localRotation = Quaternion.Euler(cameraAngle, 0, 0);
+            }
         }
-            // Vertical position
-        headPos = actionHeadPosition.ReadValue<Vector3>();
-        camera.transform.localPosition = headPos;
+        else {
+            // Camera movement (VR)
+                // Rotation
+            lookDirection = actionLook3D.ReadValue<Quaternion>();
+            eulerAngles = lookDirection.eulerAngles;
+            pitch = eulerAngles.x;
+            if (pitch > 180f) pitch -= 360f;
+            transform.rotation = Quaternion.Euler(0, eulerAngles.y, 0); 
+            cameraAngle = Mathf.Clamp(pitch, -80f, 80f);
+            camera.transform.localRotation = Quaternion.Euler(cameraAngle, 0, 0);
+
+                // Camera position
+            headPos = actionHeadPosition.ReadValue<Vector3>();
+            camera.transform.localPosition = headPos;
+        }
+
+
+        transform.position = new Vector3(transform.position.x, 1.5f, transform.position.z);
     }
 }
