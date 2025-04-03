@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ThisColor
+  m_Name: Tomato
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 2100000, guid: 3a2a240e855abfa45bda4cc90c37cbcc, type: 2}
   m_ModifiedSerializedProperties: 0
@@ -25,8 +25,8 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _Glossiness: 0.5
-    - _Metallic: 0
+    - _Glossiness: 0.626
+    - _Metallic: 0.087
     m_Colors:
-    - _Color: {r: 0.88301885, g: 0.7537719, b: 0.61644715, a: 1}
+    - _Color: {r: 1, g: 0.14168775, b: 0, a: 1}
   m_BuildTextureStacks: []

@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class Movement : MonoBehaviour
 {
-    public bool vr = false;
+    public bool VR = false;
     public InputActionAsset controls;
     public GameObject camera;
 
@@ -13,9 +13,6 @@ public class Movement : MonoBehaviour
     private InputAction actionLook;
     private InputAction actionLook3D;
     private InputAction actionHeadPosition;
-    private InputAction actionInteract;
-    private InputAction actionInteractLeft;
-    private InputAction actionInteractRight;
 
     public CharacterController characterController;
     float speed = 4f;
@@ -39,9 +36,6 @@ public class Movement : MonoBehaviour
         actionLook = controls.FindAction("Look");
         actionLook3D = controls.FindAction("Look3D");
         actionHeadPosition = controls.FindAction("HeadPosition");
-        actionInteract = controls.FindAction("Interact");
-        actionInteractLeft = controls.FindAction("InteractLeft");
-        actionInteractRight = controls.FindAction("InteractRight");
 
         Cursor.visible = false;
         Screen.lockCursor = true;
@@ -53,9 +47,6 @@ public class Movement : MonoBehaviour
         actionLook.Enable();
         actionLook3D.Enable();
         actionHeadPosition.Enable();
-        actionInteract.Enable();
-        actionInteractLeft.Enable();
-        actionInteractRight.Enable();
     }
 
     public void OnDisable()
@@ -64,9 +55,6 @@ public class Movement : MonoBehaviour
         actionLook.Disable();
         actionLook3D.Disable();
         actionHeadPosition.Disable();
-        actionInteract.Disable();
-        actionInteractLeft.Disable();
-        actionInteractRight.Disable();
     }
 
     public void Update()
@@ -79,7 +67,7 @@ public class Movement : MonoBehaviour
         moveDirection = transform.TransformDirection(moveDirection);
         characterController.Move(moveDirection * speed * Time.deltaTime);
 
-        if (!vr)
+        if (!VR)
         {
             // Camera movement (mouse/gamepad)
             lookInput = actionLook.ReadValue<Vector2>();
