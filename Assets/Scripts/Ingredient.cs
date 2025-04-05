@@ -6,9 +6,19 @@ public class Ingredient : MonoBehaviour
 {
     public enum IngredientType
     {
+        // Plate : 0
         Plate,
+
+        // Crust : 1
         PizzaCrust,
-        Tomato
+
+        // Sauce : 2
+        TomatoSauce,
+
+        // Toppings : 3 - 5
+        Tomato,
+        Pepperoni,
+        MozzerellaCheese
     }
 
     public IngredientType ingredientType;
