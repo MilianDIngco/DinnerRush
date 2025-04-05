@@ -36,10 +36,26 @@ public class Customer : MonoBehaviour
 
     }
 
+    public void PrintRecipe()
+    {
+        string print = "";
+        print += ("I want ");
+        for (int i = 0; i < desired.toppings.Count; i++)
+        {
+            print += (desired.toppings[i] + ", ");
+        }
+        print += ("cooked at " + desired.cookedness + " cookedness, ");
+        print += ("and " + desired.numSlices + " slices please!");
+
+        Debug.Log(print);
+    }
+
     // Generates a recipe randomly
     private Recipe GenerateRecipe()
     {
         Recipe recipe = new Recipe();
+        recipe.toppings = new List<Ingredient.IngredientType>();
+
         recipe.cookedness = Mathf.RoundToInt(Random.Range(0, 10));
         recipe.numSlices = Mathf.RoundToInt(Random.Range(0, 4));
         
@@ -65,7 +81,7 @@ public class Customer : MonoBehaviour
             );
         }
 
-        return desired;
+        return recipe;
     }
 
     // I'm aware this scoring is far too lenient, but how its calculated can be changed later

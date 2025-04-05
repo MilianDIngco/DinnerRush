@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public Queue<int> customerQueue;
     public Queue<int> customerWait;
 
+    public float waveDurationIncrement = 5;
+
     public List<GameObject> customers;
     public int score = 0;
 
@@ -17,11 +19,14 @@ public class GameManager : MonoBehaviour
     public List<float> entranceTimes;
     public int currentCustomer = 0;
 
+    bool waveEnd = false;
 
     // Start is called before the first frame update
     void Start()
     {
         customers = new List<GameObject>();
+        customerQueue = new Queue<int>();
+        customerWait = new Queue<int>();
 
         GenerateWave(5);
     }
@@ -29,12 +34,18 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.time > entranceTimes[currentCustomer])
+        if (currentCustomer == customers.Count)
+        {
+            Debug.Log("Game Over");
+        }
+
+        if (!waveEnd && Time.time > entranceTimes[currentCustomer])
         {
             customers[currentCustomer].transform.position = customerStartPosition.transform.position;
             customerQueue.Enqueue(currentCustomer);
             Customer customer = customers[currentCustomer].GetComponent<Customer>();
-            
+
+            customer.PrintRecipe();
             currentCustomer++;
         }
     }
@@ -52,7 +63,7 @@ public class GameManager : MonoBehaviour
 
         entranceTimes = new List<float>(customers.Count);
         waveStartTime = Time.time;
-        waveDuration = 3000;
+        waveDuration = waveNumber * waveDurationIncrement;
 
         for (int i = 0; i < customers.Count; i++)
         {
