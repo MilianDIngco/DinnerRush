@@ -53,7 +53,7 @@ public class GrabObjects : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, 1.5f))
             {
-                if (hit.collider.gameObject.tag == "Ingredient") {
+                if (hit.collider.gameObject.tag == "Ingredient" || hit.collider.gameObject.tag == "Pizza" || hit.collider.gameObject.tag == "PizzaCutter") {
                     holding = true;
                     holdingObjectHand = hit.collider.gameObject;
                     holdingObjectHand.transform.SetParent(hand.transform);
@@ -64,6 +64,22 @@ public class GrabObjects : MonoBehaviour
                     rb.useGravity = false;
                     rb.velocity = Vector3.zero;
                     rb.angularVelocity = Vector3.zero;
+                }
+                else if (hit.collider.gameObject.tag == "Oven")
+                {
+                    if (hit.collider.gameObject.GetComponent<Oven>().cooking)
+                    {
+                        GameObject pizza = hit.collider.gameObject.GetComponent<Oven>().StopCooking();
+                        holding = true;
+                        holdingObjectHand = pizza.GetComponent<Collider>().gameObject;
+                        holdingObjectHand.transform.SetParent(hand.transform);
+                        holdingObjectHand.transform.localPosition = Vector3.zero;
+                        holdingObjectHand.transform.rotation = Quaternion.Euler(Vector3.zero);
+                        Rigidbody rb = holdingObjectHand.GetComponent<Rigidbody>();
+                        rb.useGravity = false;
+                        rb.velocity = Vector3.zero;
+                        rb.angularVelocity = Vector3.zero;
+                    }
                 }
             }
         }

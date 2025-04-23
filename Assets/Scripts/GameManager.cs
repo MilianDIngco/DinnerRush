@@ -34,10 +34,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (currentCustomer == customers.Count)
-        {
-            Debug.Log("Game Over");
-        }
+        //if (currentCustomer == customers.Count)
+        //{
+            //Debug.Log("Game Over");
+        //}
 
         if (!waveEnd && Time.time > entranceTimes[currentCustomer])
         {

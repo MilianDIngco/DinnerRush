@@ -73,7 +73,7 @@ public class Customer : MonoBehaviour
         int nToppings = Mathf.RoundToInt(Random.Range(1, 4));
 
         int minTopping = 3;
-        int maxTopping = 5;
+        int maxTopping = 6;
         for (int i = 0; i < nToppings; i++)
         {
             recipe.toppings.Add(
@@ -115,5 +115,13 @@ public class Customer : MonoBehaviour
         float normDistA = (float)(1 / (sigma * Mathf.Sqrt(2 * Mathf.PI)));
         float normDistEXP = (float)Mathf.Exp(-0.5f * Mathf.Pow((x - mu) / sigma, 2));
         return Mathf.RoundToInt(Mathf.Max(normDistA * normDistEXP * 100, 100));
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        if(col.gameObject.tag == "Pizza")
+        {
+            UnityEngine.Debug.Log(scoreResult(col.gameObject.GetComponent<Pizza>().recipe));
+        }
     }
 }
