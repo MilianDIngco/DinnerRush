@@ -86,8 +86,6 @@ public class GrabObjects : MonoBehaviour
                     Customer customer = hit.collider.gameObject.GetComponent<Customer>();
                     if (customer.ordering)
                         customer.TakeOrder();
-                    else if (customer.waiting) 
-                        customer.GiveOrder();
                 }
             }
         }

@@ -51,6 +51,16 @@ public class GameManager : MonoBehaviour
         waitingQueue.queuePositions = waitingPositions;
         waitingQueue.queueEnd = waitingPositions[waitingPositions.Count - 1];
 
+        foreach (GameObject go in orderingPositions)
+        {
+            go.GetComponent<Renderer>().enabled = false;
+        }
+
+        foreach (GameObject go in waitingPositions)
+        {
+            go.GetComponent<Renderer>().enabled = false;
+        }
+
         GenerateWave(5);
     }
 

@@ -19,6 +19,7 @@ public class Customer : MonoBehaviour
     public bool moving = false;
     public GameObject go;
 
+    public float scoringHarshness = 1.5f;
     public void Awake()
     {
         // When a character is made, a random recipe is generated
@@ -109,7 +110,7 @@ public class Customer : MonoBehaviour
         recipe.toppings = new List<Ingredient.IngredientType>();
 
         recipe.cookedness = Mathf.RoundToInt(Random.Range(0, 10));
-        recipe.numSlices = Mathf.RoundToInt(Random.Range(0, 4));
+        recipe.numSlices = Mathf.RoundToInt(Random.Range(1, 4));
         
         // Set plate
         recipe.toppings.Add((Ingredient.IngredientType)0);
@@ -165,7 +166,7 @@ public class Customer : MonoBehaviour
     {
         float sigma = 0.35f;
         float normDistA = (float)(1 / (sigma * Mathf.Sqrt(2 * Mathf.PI)));
-        float normDistEXP = (float)Mathf.Exp(-0.5f * Mathf.Pow((x - mu) / sigma, 2));
+        float normDistEXP = (float)Mathf.Exp(-scoringHarshness * Mathf.Pow((x - mu) / sigma, 2));
         return Mathf.RoundToInt(Mathf.Max(normDistA * normDistEXP * 100, 100));
     }
 
@@ -173,6 +174,8 @@ public class Customer : MonoBehaviour
     {
         if(col.gameObject.tag == "Pizza")
         {
+            GiveOrder();
+            Destroy(col.gameObject);
             UnityEngine.Debug.Log(scoreResult(col.gameObject.GetComponent<Pizza>().recipe));
         }
     }
