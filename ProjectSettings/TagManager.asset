@@ -10,6 +10,7 @@ TagManager:
   - Pizza
   - Oven
   - PizzaCutter
+  - Customer
   layers:
   - Default
   - TransparentFX

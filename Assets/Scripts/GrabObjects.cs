@@ -51,7 +51,7 @@ public class GrabObjects : MonoBehaviour
             Ray ray = new Ray(camera.transform.position, camera.transform.forward);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, 1.5f))
+            if (Physics.Raycast(ray, out hit, 2.5f))
             {
                 if (hit.collider.gameObject.tag == "Ingredient" || hit.collider.gameObject.tag == "Pizza" || hit.collider.gameObject.tag == "PizzaCutter") {
                     holding = true;
@@ -80,6 +80,14 @@ public class GrabObjects : MonoBehaviour
                         rb.velocity = Vector3.zero;
                         rb.angularVelocity = Vector3.zero;
                     }
+                }
+                else if (hit.collider.gameObject.tag == "Customer")
+                {
+                    Customer customer = hit.collider.gameObject.GetComponent<Customer>();
+                    if (customer.ordering)
+                        customer.TakeOrder();
+                    else if (customer.waiting) 
+                        customer.GiveOrder();
                 }
             }
         }

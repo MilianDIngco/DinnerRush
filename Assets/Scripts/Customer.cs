@@ -14,26 +14,78 @@ public class Customer : MonoBehaviour
     Recipe desired;
     public int queuePosition;
     public int waitPosition;
+    public bool ordering = false;
+    public bool waiting = false;
+    public bool moving = false;
+    public GameObject go;
 
     public void Awake()
     {
         // When a character is made, a random recipe is generated
         desired = GenerateRecipe();
+        go = this.gameObject;
     }
 
-    public void MoveToQueue()
+    public void Update()
     {
-
+        
     }
 
-    public void MoveToWait()
+    public void TakeOrder()
     {
+        PrintRecipe();
+        if (queuePosition == 0 && ordering)
+        {
+            ordering = false;
+            waiting = true;
+            GameManager.Instance.PopCustomer(true);
+        }
+    }
 
+    public void GiveOrder()
+    {
+        Debug.Log("Gave order");
+        if (waitPosition == 0 && waiting)
+        {
+            GameManager.Instance.PopCustomer(false);
+            waiting = false;
+        }
+    }
+
+    public IEnumerator MoveToQueue(List<Vector3> destinations, float speed)
+    {
+        moving = true;
+        foreach (Vector3 dest in destinations)
+        {
+            yield return StartCoroutine(MoveTo(dest, speed));
+        }
+        moving = false;
+    }
+
+    IEnumerator MoveTo(Vector3 destination, float speed)
+    {
+        float time = 0;
+        Vector3 startPosition = transform.position;
+        float distance = Vector3.Distance(transform.position, destination);
+        float duration = distance / speed;
+
+        while (time < duration)
+        {
+            transform.position = Vector3.Lerp(startPosition, destination, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = destination;
     }
 
     public void Leave()
     {
+        Vector3 leave = transform.position - new Vector3(0, -10, 0);
+        List<Vector3> positions = new List<Vector3>();
+        positions.Add(leave);
 
+        StartCoroutine(MoveToQueue(positions, 1));
     }
 
     public void PrintRecipe()

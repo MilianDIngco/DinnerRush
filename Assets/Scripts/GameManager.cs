@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
+
     public GameObject customerPrefab;
     public GameObject customerStartPosition;
-    public Queue<int> customerQueue;
-    public Queue<int> customerWait;
+
+    public List<GameObject> orderingPositions = new List<GameObject>();
+    public List<GameObject> waitingPositions = new List<GameObject>();
 
     public float waveDurationIncrement = 5;
 
@@ -21,12 +24,32 @@ public class GameManager : MonoBehaviour
 
     bool waveEnd = false;
 
+    public CustomerQueue orderingQueue;
+    public CustomerQueue waitingQueue;
+
     // Start is called before the first frame update
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        } else
+        {
+            Destroy(this);
+        }
+    }
+
     void Start()
     {
         customers = new List<GameObject>();
-        customerQueue = new Queue<int>();
-        customerWait = new Queue<int>();
+
+        orderingQueue = new CustomerQueue();
+        waitingQueue = new CustomerQueue();
+
+        orderingQueue.queuePositions = orderingPositions;
+        orderingQueue.queueEnd = orderingPositions[orderingPositions.Count - 1];
+        waitingQueue.queuePositions = waitingPositions;
+        waitingQueue.queueEnd = waitingPositions[waitingPositions.Count - 1];
 
         GenerateWave(5);
     }
@@ -39,14 +62,32 @@ public class GameManager : MonoBehaviour
             //Debug.Log("Game Over");
         //}
 
-        if (!waveEnd && Time.time > entranceTimes[currentCustomer])
+        if (!waveEnd && currentCustomer < customers.Count && Time.time > entranceTimes[currentCustomer])
         {
             customers[currentCustomer].transform.position = customerStartPosition.transform.position;
-            customerQueue.Enqueue(currentCustomer);
+            orderingQueue.Enqueue(customers[currentCustomer].GetComponent<Customer>());
             Customer customer = customers[currentCustomer].GetComponent<Customer>();
-
-            customer.PrintRecipe();
+            customer.ordering = true;
             currentCustomer++;
+        }
+
+        orderingQueue.UpdatePositions();
+        waitingQueue.UpdatePositions();
+    }
+
+    public void PopCustomer(bool ordering)
+    {
+        Customer customer;
+
+        if (ordering)
+        {
+            customer = orderingQueue.Dequeue();
+            waitingQueue.Enqueue(customer);
+        } else
+        {
+            customer = waitingQueue.Dequeue();
+            Debug.Log("thanks....");
+            customer.Leave();
         }
     }
 
