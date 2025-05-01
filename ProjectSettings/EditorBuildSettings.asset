@@ -4,7 +4,13 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Landing.unity
+    guid: 75c2367c42c3747519a01fca397bb270
+  - enabled: 1
+    path: Assets/Scenes/DinnerRush.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 05b99fe70935ca541a6f5c2f3c47002c, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: d06fd85a75a6b644aa3e60d6efeef7c1, type: 2}
