@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     public SpawnObject pepperoniSpawner;
     public SpawnObject cheeseSpawner;
 
+    public StressLevel stressMeter;
 
     // Start is called before the first frame update
     private void Awake()
@@ -116,6 +117,8 @@ public class GameManager : MonoBehaviour
             Destroy(go);
         }
 
+        stressMeter.SetSlider(10);
+
         customers.Clear();
         for (int i = 0; i < waveNumber; i++)
         {
@@ -151,6 +154,8 @@ public class GameManager : MonoBehaviour
             score += customerScore;
 
             customer.GiveOrder();
+
+            stressMeter.SetSlider(-customerScore / 10);
         }
 
     }
