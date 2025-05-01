@@ -162,7 +162,7 @@ public class Customer : MonoBehaviour
 
         // If customer is unsatisfied, stress increases
         if (((cookednessAccuracy + cutAccuracy + toppingAccuracy) / 3) > 3){
-            stressMeter.SetSlider(5);
+            // ###BROKEN stressMeter.SetSlider(5);
         }
 
         return (cookednessAccuracy + cutAccuracy + toppingAccuracy) / 3;
@@ -181,8 +181,8 @@ public class Customer : MonoBehaviour
         if(col.gameObject.tag == "Pizza")
         {
             GiveOrder();
-            Destroy(col.gameObject);
             UnityEngine.Debug.Log(scoreResult(col.gameObject.GetComponent<Pizza>().recipe));
+            Destroy(col.gameObject);
         }
     }
 }
