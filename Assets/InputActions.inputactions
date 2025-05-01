@@ -24,45 +24,9 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Look3D",
-                    "type": "Value",
-                    "id": "102b3ac4-8b91-4191-add9-9d7ba73db9c3",
-                    "expectedControlType": "Quaternion",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "HeadPosition",
-                    "type": "Value",
-                    "id": "dae5f1b5-5af7-4beb-9900-c55298f3d85c",
-                    "expectedControlType": "Vector3",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "Interact",
                     "type": "Button",
                     "id": "ca8995cb-6a00-48c5-a6c3-6c7183dbb488",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "InteractRight",
-                    "type": "Button",
-                    "id": "bceceb77-1fa9-4c73-879f-cc2593d16751",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "InteractLeft",
-                    "type": "Button",
-                    "id": "e7bb5d73-d4eb-4b76-b1b9-df0de59ef6d6",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -122,83 +86,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "80ad63ad-b5c8-406a-81b1-7046c153419c",
-                    "path": "<XRController>/{Primary2DAxis}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6d3f3046-b182-4179-87ae-0f09e18797a9",
-                    "path": "<XRHMD>/centerEyeRotation",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look3D",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "23840e34-c541-4a41-868d-f6899f03a556",
-                    "path": "<XRHMD>/centerEyePosition",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "HeadPosition",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "343bfad7-324c-4955-9623-ba5f2da67e5f",
-                    "path": "<XRController>{LeftHand}/{GripButton}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "InteractLeft",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c531c4b7-0136-4f38-ae94-4d3216bd0acf",
-                    "path": "<OculusTouchController>{LeftHand}/gripPressed",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "InteractLeft",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "34c5afb3-f2a4-4147-8f3b-ddefa4fd0153",
-                    "path": "<OculusTouchController>{RightHand}/gripPressed",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "InteractRight",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7a397ea0-f9fc-4bf8-adad-f74f7b2e1d61",
-                    "path": "<XRController>{RightHand}/{GripButton}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "InteractRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

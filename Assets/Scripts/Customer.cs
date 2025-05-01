@@ -176,8 +176,8 @@ public class Customer : MonoBehaviour
         if(col.gameObject.tag == "Pizza")
         {
             GiveOrder();
-            Destroy(col.gameObject);
             UnityEngine.Debug.Log(scoreResult(col.gameObject.GetComponent<Pizza>().recipe));
+            Destroy(col.gameObject);
         }
     }
 }

@@ -13,35 +13,24 @@ public class GrabObjects : MonoBehaviour
     private InputAction actionInteractRight;
 
     public GameObject hand;
-    public GameObject leftHand;
-    public GameObject rightHand;
 
     public GameObject holdingObjectHand;
-    public GameObject holdingObjectLeftHand;
-    public GameObject holdingObjectRightHand;
 
     private bool holding = false;
-    private bool holdingLeft = false, holdingRight = false;
 
     public void Awake()
     {
         actionInteract = controls.FindAction("Interact");
-        actionInteractLeft = controls.FindAction("InteractLeft");
-        actionInteractRight = controls.FindAction("InteractRight");
     }
 
     public void OnEnable()
     {
         actionInteract.Enable();
-        actionInteractLeft.Enable();
-        actionInteractRight.Enable();
     }
 
     public void OnDisable()
     {
         actionInteract.Disable();
-        actionInteractLeft.Disable();
-        actionInteractRight.Disable();
     }
 
     public void Update()
