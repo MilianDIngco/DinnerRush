@@ -11,8 +11,6 @@ public class Movement : MonoBehaviour
 
     private InputAction actionMove;
     private InputAction actionLook;
-    private InputAction actionLook3D;
-    private InputAction actionHeadPosition;
 
     public CharacterController characterController;
     float speed = 4f;
@@ -24,18 +22,10 @@ public class Movement : MonoBehaviour
     Vector2 lookInput;
     float cameraAngle;
 
-    // VR
-    Quaternion lookDirection;
-    Vector3 headPos;
-    Vector3 eulerAngles;
-    float pitch;
-
     public void Awake()
     {
         actionMove = controls.FindAction("Move");
         actionLook = controls.FindAction("Look");
-        actionLook3D = controls.FindAction("Look3D");
-        actionHeadPosition = controls.FindAction("HeadPosition");
 
         Cursor.visible = false;
         Screen.lockCursor = true;
@@ -45,16 +35,12 @@ public class Movement : MonoBehaviour
     {
         actionMove.Enable();
         actionLook.Enable();
-        actionLook3D.Enable();
-        actionHeadPosition.Enable();
     }
 
     public void OnDisable()
     {
         actionMove.Disable();
         actionLook.Disable();
-        actionLook3D.Disable();
-        actionHeadPosition.Disable();
     }
 
     public void Update()
@@ -67,34 +53,14 @@ public class Movement : MonoBehaviour
         moveDirection = transform.TransformDirection(moveDirection);
         characterController.Move(moveDirection * speed * Time.deltaTime);
 
-        if (!VR)
+        lookInput = actionLook.ReadValue<Vector2>();
+        if (lookInput != Vector2.zero)
         {
-            // Camera movement (mouse/gamepad)
-            lookInput = actionLook.ReadValue<Vector2>();
-            if (lookInput != Vector2.zero)
-            {
-                transform.Rotate(Vector3.up, (lookInput.x * mouseSensitivity * Time.deltaTime));
-                cameraAngle -= lookInput.y * mouseSensitivity * Time.deltaTime;
-                cameraAngle = Mathf.Clamp(cameraAngle, -80, 80);
-                camera.transform.localRotation = Quaternion.Euler(cameraAngle, 0, 0);
-            }
-        }
-        else {
-            // Camera movement (VR)
-                // Rotation
-            lookDirection = actionLook3D.ReadValue<Quaternion>();
-            eulerAngles = lookDirection.eulerAngles;
-            pitch = eulerAngles.x;
-            if (pitch > 180f) pitch -= 360f;
-            transform.rotation = Quaternion.Euler(0, eulerAngles.y, 0); 
-            cameraAngle = Mathf.Clamp(pitch, -80f, 80f);
+            transform.Rotate(Vector3.up, (lookInput.x * mouseSensitivity * Time.deltaTime));
+            cameraAngle -= lookInput.y * mouseSensitivity * Time.deltaTime;
+            cameraAngle = Mathf.Clamp(cameraAngle, -80, 80);
             camera.transform.localRotation = Quaternion.Euler(cameraAngle, 0, 0);
-
-                // Camera position
-            headPos = actionHeadPosition.ReadValue<Vector3>();
-            camera.transform.localPosition = headPos;
         }
-
 
         transform.position = new Vector3(transform.position.x, 1.5f, transform.position.z);
     }

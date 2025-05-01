@@ -18,6 +18,7 @@ public class Customer : MonoBehaviour
     public bool waiting = false;
     public bool moving = false;
     public GameObject go;
+    public StressLevel stressMeter;
 
     CustomerUI cui;
 
@@ -191,8 +192,8 @@ public class Customer : MonoBehaviour
         if(col.gameObject.tag == "Pizza")
         {
             GiveOrder();
-            Destroy(col.gameObject);
             UnityEngine.Debug.Log(scoreResult(col.gameObject.GetComponent<Pizza>().recipe));
+            Destroy(col.gameObject);
         }
     }
 }
