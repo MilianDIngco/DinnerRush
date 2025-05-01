@@ -123,8 +123,6 @@ public class GameManager : MonoBehaviour
         {
             entranceTimes.Add((waveStartTime + (waveDuration * (float)i / customers.Count)));
         }
-
-        
     }
 
     bool IsWaveOver()
@@ -137,6 +135,8 @@ public class GameManager : MonoBehaviour
         Customer customer = customers[customerIndex].GetComponent<Customer>();
         int customerScore = customer.scoreResult(recipe);
 
+        stressMeter.SetSlider(-customerScore/10);
+        
         score += customerScore;
     }
 }

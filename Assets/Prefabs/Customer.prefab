@@ -124,4 +124,7 @@ MonoBehaviour:
   waitPosition: 0
   ordering: 0
   waiting: 0
+  moving: 0
   go: {fileID: 0}
+  stressMeter: {fileID: 0}
+  scoringHarshness: 1.5
