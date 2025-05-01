@@ -74,7 +74,6 @@ public class Oven : MonoBehaviour
         if (cooking)
         {
             ovenLight.GetComponent<MeshRenderer>().material = on;
-
             UnityEngine.Debug.Log("Cookedness: " + pizzaCooking.GetComponent<Pizza>().recipe.cookedness);
             StartCoroutine(IncreaseCookedness());
         }

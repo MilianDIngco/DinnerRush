@@ -6,6 +6,11 @@ public class SpawnObject : MonoBehaviour
 {
     public GameObject ItemPrefab;
 
+    public void Start()
+    {
+        GetComponent<MeshRenderer>().enabled = false;
+    }
+
     public void Spawn()
     {
         GameObject item = Instantiate(ItemPrefab);

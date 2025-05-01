@@ -10,6 +10,7 @@ public class CustomerQueue
 
     public int speed = 2;
     public float overflowDistance = 1.5f;
+    public bool[] tableSpotsOccupied;
 
     public CustomerQueue()
     {
@@ -41,7 +42,8 @@ public class CustomerQueue
             positions.Add(queuePosition);
 
             customer.StartCoroutine(customer.MoveToQueue(positions, speed));
-        } else
+        }
+        else
         {
             customer.queuePosition = queue.Count - 1;
 
@@ -53,7 +55,7 @@ public class CustomerQueue
             customer.StartCoroutine(customer.MoveToQueue(positions, speed));
         }
 
-        
+
     }
 
     public Customer Dequeue()
@@ -90,6 +92,64 @@ public class CustomerQueue
 
             c.StartCoroutine(c.MoveToQueue(positions, speed));
 
+        }
+    }
+
+    public void EnqueueTable(Customer customer)
+    {
+        queue.Enqueue(customer);
+
+        if (tableSpotsOccupied == null)
+            tableSpotsOccupied = new bool[queuePositions.Count];
+
+        for (int i = 0; i < queuePositions.Count; i++)
+        {
+            if (!tableSpotsOccupied[i])
+            {
+                customer.queuePosition = i;
+                customer.tableID = i;
+                tableSpotsOccupied[i] = true;
+
+                Vector3 spot = queuePositions[i].transform.position;
+                List<Vector3> positions = new List<Vector3> { spot };
+                customer.StartCoroutine(customer.MoveToQueue(positions, speed));
+                return;
+            }
+        }
+    }
+
+    public Customer DequeueTable()
+    {
+        if (queue.Count == 0)
+            return null;
+
+        Customer popped = queue.Dequeue();
+        GameManager.Instance.MessyTable(popped.tableID);
+
+        return popped;
+    }
+
+    public void FreeTablePosition(int index)
+    {
+        if(tableSpotsOccupied == null)
+            tableSpotsOccupied = new bool[queuePositions.Count];
+
+        tableSpotsOccupied[index] = false;
+    }
+
+    public void UpdateTablePositions()
+    {
+        foreach (Customer c in queue)
+        {
+            if (c.moving)
+                continue;
+
+            if (c.queuePosition >= 0 && c.queuePosition < queuePositions.Count)
+            {
+                Vector3 spot = queuePositions[c.queuePosition].transform.position;
+                List<Vector3> positions = new List<Vector3> { spot };
+                c.StartCoroutine(c.MoveToQueue(positions, speed));
+            }
         }
     }
 

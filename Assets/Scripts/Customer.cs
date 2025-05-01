@@ -20,7 +20,9 @@ public class Customer : MonoBehaviour
     public GameObject go;
     public StressLevel stressMeter;
 
-    CustomerUI cui;
+    public CustomerUI cui;
+
+    public int tableID = -1;
 
     public float scoringHarshness = 1.5f;
     public void Awake()
@@ -61,11 +63,13 @@ public class Customer : MonoBehaviour
 
     public void GiveOrder()
     {
-        Debug.Log("Gave order");
         if (waitPosition == 0 && waiting)
         {
-            GameManager.Instance.PopCustomer(false);
-            waiting = false;
+            if (GameManager.Instance.PopCustomer(false))
+            {
+                waiting = false;
+                Debug.Log("Gave order");
+            }
         }
     }
 

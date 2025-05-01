@@ -11,6 +11,10 @@ public class GameManager : MonoBehaviour
 
     public List<GameObject> orderingPositions = new List<GameObject>();
     public List<GameObject> waitingPositions = new List<GameObject>();
+    public List<GameObject> seatPositions = new List<GameObject>();
+
+    public List<GameObject> tables = new List<GameObject>();
+    public Material messyMaterial;
 
     public float waveDurationIncrement = 5;
 
@@ -26,6 +30,7 @@ public class GameManager : MonoBehaviour
 
     public CustomerQueue orderingQueue;
     public CustomerQueue waitingQueue;
+    public CustomerQueue seatQueue;
 
     public SpawnObject plateSpawner;
     public SpawnObject crustSpawner;
@@ -42,7 +47,8 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-        } else
+        }
+        else
         {
             Destroy(this);
         }
@@ -54,11 +60,14 @@ public class GameManager : MonoBehaviour
 
         orderingQueue = new CustomerQueue();
         waitingQueue = new CustomerQueue();
+        seatQueue = new CustomerQueue();
 
         orderingQueue.queuePositions = orderingPositions;
         orderingQueue.queueEnd = orderingPositions[orderingPositions.Count - 1];
         waitingQueue.queuePositions = waitingPositions;
         waitingQueue.queueEnd = waitingPositions[waitingPositions.Count - 1];
+        seatQueue.queuePositions = seatPositions;
+        seatQueue.queueEnd = seatPositions[seatPositions.Count - 1];
 
         foreach (GameObject go in orderingPositions)
         {
@@ -66,6 +75,11 @@ public class GameManager : MonoBehaviour
         }
 
         foreach (GameObject go in waitingPositions)
+        {
+            go.SetActive(false);
+        }
+
+        foreach (GameObject go in seatPositions)
         {
             go.SetActive(false);
         }
@@ -78,7 +92,7 @@ public class GameManager : MonoBehaviour
     {
         //if (currentCustomer == customers.Count)
         //{
-            //Debug.Log("Game Over");
+        //Debug.Log("Game Over");
         //}
 
         if (!waveEnd && currentCustomer < customers.Count && Time.time > entranceTimes[currentCustomer])
@@ -92,9 +106,10 @@ public class GameManager : MonoBehaviour
 
         orderingQueue.UpdatePositions();
         waitingQueue.UpdatePositions();
+        seatQueue.UpdateTablePositions();
     }
 
-    public void PopCustomer(bool ordering)
+    public bool PopCustomer(bool ordering)
     {
         Customer customer;
 
@@ -102,12 +117,45 @@ public class GameManager : MonoBehaviour
         {
             customer = orderingQueue.Dequeue();
             waitingQueue.Enqueue(customer);
-        } else
-        {
-            customer = waitingQueue.Dequeue();
-            Debug.Log("thanks....");
-            customer.Leave();
+            return true;
         }
+        else
+        {
+            bool seatAvailable = false;
+            if(seatQueue.tableSpotsOccupied == null)
+                seatQueue.tableSpotsOccupied = new bool[seatQueue.queuePositions.Count];
+            for (int i = 0; i < seatQueue.queuePositions.Count; i++)
+            {
+                if (!seatQueue.tableSpotsOccupied[i])
+                {
+                    seatAvailable = true;
+                }
+            }
+            if (seatAvailable)
+            {
+                customer = waitingQueue.Dequeue();
+                seatQueue.EnqueueTable(customer);
+                Debug.Log("thanks....");
+                customer.cui.ShowCanvas(false);
+                StartCoroutine(Leave());
+                return true;
+            }
+            Debug.Log("nowhere to sit....");
+            return false;
+        }
+    }
+
+    IEnumerator Leave()
+    {
+        yield return new WaitForSeconds(60);
+        Customer customer;
+        customer = seatQueue.DequeueTable();
+        customer.Leave();
+    }
+
+    public void BusTable(int tableID)
+    {
+        seatQueue.FreeTablePosition(tableID);
     }
 
     void GenerateWave(int waveNumber)
@@ -162,7 +210,7 @@ public class GameManager : MonoBehaviour
 
     public void spawnObject(Ingredient.IngredientType ingredient)
     {
-        switch(ingredient)
+        switch (ingredient)
         {
             case Ingredient.IngredientType.Plate:
                 plateSpawner.Spawn();
@@ -183,5 +231,10 @@ public class GameManager : MonoBehaviour
                 cheeseSpawner.Spawn();
                 break;
         }
+    }
+
+    public void MessyTable(int tableID)
+    {
+        tables[tableID].GetComponent<Renderer>().material = messyMaterial;
     }
 }
