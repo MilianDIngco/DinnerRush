@@ -19,11 +19,16 @@ public class Customer : MonoBehaviour
     public bool moving = false;
     public GameObject go;
 
+    CustomerUI cui;
+
     public float scoringHarshness = 1.5f;
     public void Awake()
     {
         // When a character is made, a random recipe is generated
         desired = GenerateRecipe();
+        cui = GetComponent<CustomerUI>();
+        cui.SetRecipe(desired);
+
         go = this.gameObject;
     }
 
@@ -35,6 +40,16 @@ public class Customer : MonoBehaviour
     public void TakeOrder()
     {
         PrintRecipe();
+
+        StartCoroutine(showRecipe());
+        
+    }
+
+    public IEnumerator showRecipe()
+    {
+        cui.ShowCanvas(true);
+        yield return new WaitForSeconds(6);
+
         if (queuePosition == 0 && ordering)
         {
             ordering = false;
@@ -116,17 +131,17 @@ public class Customer : MonoBehaviour
         recipe.toppings.Add((Ingredient.IngredientType)0);
 
         // Set sauce
-        int minSauce = 2;
-        int maxSauce = 2;
+        int minSauce = Ingredient.firstSauce;
+        int maxSauce = Ingredient.firstTopping;
         recipe.toppings.Add(
             (Ingredient.IngredientType)Mathf.RoundToInt(Random.Range(minSauce, maxSauce))
             );
 
         // Set toppings
-        int nToppings = Mathf.RoundToInt(Random.Range(1, 4));
+        int nToppings = 2; // Mathf.RoundToInt(Random.Range(1, 4));
 
-        int minTopping = 3;
-        int maxTopping = 6;
+        int minTopping = Ingredient.firstTopping;
+        int maxTopping = Ingredient.last + 1;
         for (int i = 0; i < nToppings; i++)
         {
             recipe.toppings.Add(
@@ -141,33 +156,34 @@ public class Customer : MonoBehaviour
     public int scoreResult(Recipe created)
     {
         // Calculate closeness to cookedness
-        int cookednessAccuracy = normalAccuracy(created.cookedness, desired.cookedness);
+        int cookednessAccuracy = normalAccuracy((float) created.cookedness / desired.cookedness);
 
         // CANNOT BE BOTHERED TO FIND HOW CLOSE A CUT IS TO A LINE
-        int cutAccuracy = normalAccuracy(created.numSlices, desired.numSlices);
+        int cutAccuracy = normalAccuracy((float) created.numSlices / desired.numSlices);
 
         // Calculate number of correct toppings
         int total = desired.toppings.Count;
         int correct = 0;
-        for (int i = 0; i < created.toppings.Count; i++)
+        for (int i = 0; i < desired.toppings.Count; i++)
         {
-            if (desired.toppings.Contains(created.toppings[i]))
+            if (created.toppings.Contains(desired.toppings[i]))
             {
                 correct++;
             }
         }
 
-        int toppingAccuracy = normalAccuracy(correct, total);
+        int toppingAccuracy = normalAccuracy((float) correct / desired.toppings.Count);
 
         return (cookednessAccuracy + cutAccuracy + toppingAccuracy) / 3;
     }
 
-    public int normalAccuracy(float x, float mu)
+    public int normalAccuracy(float x)
     {
+        float mu = 1f;
         float sigma = 0.35f;
         float normDistA = (float)(1 / (sigma * Mathf.Sqrt(2 * Mathf.PI)));
         float normDistEXP = (float)Mathf.Exp(-scoringHarshness * Mathf.Pow((x - mu) / sigma, 2));
-        return Mathf.RoundToInt(Mathf.Max(normDistA * normDistEXP * 100, 100));
+        return Mathf.RoundToInt(Mathf.Min(normDistA * normDistEXP * 100, 100));
     }
 
     void OnCollisionEnter(Collision col)

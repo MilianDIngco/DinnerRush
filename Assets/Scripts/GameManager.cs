@@ -27,6 +27,14 @@ public class GameManager : MonoBehaviour
     public CustomerQueue orderingQueue;
     public CustomerQueue waitingQueue;
 
+    public SpawnObject plateSpawner;
+    public SpawnObject crustSpawner;
+    public SpawnObject sauceSpawner;
+    public SpawnObject tomatoSpawner;
+    public SpawnObject pepperoniSpawner;
+    public SpawnObject cheeseSpawner;
+
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -53,12 +61,12 @@ public class GameManager : MonoBehaviour
 
         foreach (GameObject go in orderingPositions)
         {
-            go.GetComponent<Renderer>().enabled = false;
+            go.SetActive(false);
         }
 
         foreach (GameObject go in waitingPositions)
         {
-            go.GetComponent<Renderer>().enabled = false;
+            go.SetActive(false);
         }
 
         GenerateWave(5);
@@ -103,6 +111,11 @@ public class GameManager : MonoBehaviour
 
     void GenerateWave(int waveNumber)
     {
+        foreach (GameObject go in customers)
+        {
+            Destroy(go);
+        }
+
         customers.Clear();
         for (int i = 0; i < waveNumber; i++)
         {
@@ -128,11 +141,42 @@ public class GameManager : MonoBehaviour
         return customers.Count == 0;
     }
 
-    void SubmitPizza(int customerIndex, Customer.Recipe recipe)
+    public void SubmitPizza(GameObject pizza)
     {
-        Customer customer = customers[customerIndex].GetComponent<Customer>();
-        int customerScore = customer.scoreResult(recipe);
+        Customer customer = waitingQueue.front();
+        if (customer != null)
+        {
+            Customer.Recipe submitted = pizza.GetComponent<Pizza>().recipe;
+            int customerScore = customer.scoreResult(submitted);
+            score += customerScore;
 
-        score += customerScore;
+            customer.GiveOrder();
+        }
+
+    }
+
+    public void spawnObject(Ingredient.IngredientType ingredient)
+    {
+        switch(ingredient)
+        {
+            case Ingredient.IngredientType.Plate:
+                plateSpawner.Spawn();
+                break;
+            case Ingredient.IngredientType.PizzaCrust:
+                crustSpawner.Spawn();
+                break;
+            case Ingredient.IngredientType.TomatoSauce:
+                sauceSpawner.Spawn();
+                break;
+            case Ingredient.IngredientType.Tomato:
+                tomatoSpawner.Spawn();
+                break;
+            case Ingredient.IngredientType.Pepperoni:
+                pepperoniSpawner.Spawn();
+                break;
+            case Ingredient.IngredientType.MozzerellaCheese:
+                cheeseSpawner.Spawn();
+                break;
+        }
     }
 }

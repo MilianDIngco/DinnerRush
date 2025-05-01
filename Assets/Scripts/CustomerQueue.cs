@@ -16,6 +16,14 @@ public class CustomerQueue
         queue = new Queue<Customer>();
     }
 
+    public Customer front()
+    {
+        Customer customer = null;
+        queue.TryPeek(out customer);
+
+        return customer;
+    }
+
     public void Enqueue(Customer customer)
     {
         queue.Enqueue(customer);

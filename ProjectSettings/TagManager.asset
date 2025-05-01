@@ -11,6 +11,7 @@ TagManager:
   - Oven
   - PizzaCutter
   - Customer
+  - PizzaReturn
   layers:
   - Default
   - TransparentFX

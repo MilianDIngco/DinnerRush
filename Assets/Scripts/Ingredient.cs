@@ -21,6 +21,12 @@ public class Ingredient : MonoBehaviour
         MozzerellaCheese
     }
 
+    public static int firstPlate = 0;
+    public static int firstCrust = 1;
+    public static int firstSauce = 2;
+    public static int firstTopping = 3;
+    public static int last = 5;
+
     public IngredientType ingredientType;
 
     // Start is called before the first frame update

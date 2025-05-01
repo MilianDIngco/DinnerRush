@@ -48,6 +48,8 @@ public class Pizza : MonoBehaviour
 
             recipe.toppings.Add(type);
 
+            GameManager.Instance.spawnObject(type);
+
             if(type == Ingredient.IngredientType.TomatoSauce)
             {
                 ingredient.transform.localScale = new Vector3(ingredient.transform.localScale.x * 2.8f, ingredient.transform.localScale.y * 0.18f, ingredient.transform.localScale.z * 2.8f);
