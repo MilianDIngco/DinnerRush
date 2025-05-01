@@ -12,6 +12,8 @@ TagManager:
   - PizzaCutter
   - Customer
   - PizzaReturn
+  - Table
+  - Seat
   layers:
   - Default
   - TransparentFX
