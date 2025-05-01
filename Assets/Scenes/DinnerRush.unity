@@ -457,16 +457,13 @@ MonoBehaviour:
   waveDuration: 0
   entranceTimes: []
   currentCustomer: 0
-<<<<<<< HEAD:Assets/Scenes/SampleScene.unity
   plateSpawner: {fileID: 134919984}
   crustSpawner: {fileID: 1753794154}
   sauceSpawner: {fileID: 1366975893}
   tomatoSpawner: {fileID: 1762531588}
   pepperoniSpawner: {fileID: 1716569690}
   cheeseSpawner: {fileID: 1247703713}
-=======
   stressMeter: {fileID: 864676500}
->>>>>>> a4e15ed7b01e84106dc38fa28b7a9a34fe57a056:Assets/Scenes/DinnerRush.unity
 --- !u!4 &78337070
 Transform:
   m_ObjectHideFlags: 0
