@@ -18,6 +18,7 @@ public class Customer : MonoBehaviour
     public bool waiting = false;
     public bool moving = false;
     public GameObject go;
+    public StressLevel stressMeter;
 
     public float scoringHarshness = 1.5f;
     public void Awake()
@@ -158,6 +159,11 @@ public class Customer : MonoBehaviour
         }
 
         int toppingAccuracy = normalAccuracy(correct, total);
+
+        // If customer is unsatisfied, stress increases
+        if (((cookednessAccuracy + cutAccuracy + toppingAccuracy) / 3) > 3){
+            stressMeter.SetSlider(5);
+        }
 
         return (cookednessAccuracy + cutAccuracy + toppingAccuracy) / 3;
     }

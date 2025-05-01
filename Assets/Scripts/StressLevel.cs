@@ -4,12 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class SliderBar : MonoBehaviour
+public class StressLevel : MonoBehaviour
 {
     public Slider slider;
     public TextMeshProUGUI gameOver;
+
+    void Start(){
+        slider.value = 0;
+    }
     public void SetSlider(float value){
-        slider.value = value;
+        slider.value += value;
         checkMax();
     }
 

@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
     public CustomerQueue orderingQueue;
     public CustomerQueue waitingQueue;
 
+    public StressLevel stressMeter;
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -104,6 +106,7 @@ public class GameManager : MonoBehaviour
     void GenerateWave(int waveNumber)
     {
         customers.Clear();
+        stressMeter.SetSlider(10);
         for (int i = 0; i < waveNumber; i++)
         {
             GameObject customerGO = Instantiate(customerPrefab);
@@ -121,6 +124,7 @@ public class GameManager : MonoBehaviour
             entranceTimes.Add((waveStartTime + (waveDuration * (float)i / customers.Count)));
         }
 
+        
     }
 
     bool IsWaveOver()
