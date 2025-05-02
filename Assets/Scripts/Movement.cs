@@ -45,6 +45,16 @@ public class Movement : MonoBehaviour
 
     public void Update()
     {
+        // Stop character input if UI is up
+        if (UIManager.Instance.StopCamera()) 
+        {
+            // Lock camera if stopping
+            Cursor.visible = UIManager.Instance.StopCamera();
+            Cursor.lockState = UIManager.Instance.StopCamera() ? CursorLockMode.None : CursorLockMode.Locked;  
+            return;
+        }
+
+
         //transform.position = new Vector3(transform.position.x, 1.5f, transform.position.z);
 
         // Movement

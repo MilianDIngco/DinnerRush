@@ -62,7 +62,7 @@ public class Oven : MonoBehaviour
     IEnumerator IncreaseCookedness()
     {
         yield return new WaitForSeconds(2);
-        if(cooking)
+        if(cooking && pizzaCooking != null)
         {
             ovenLight.GetComponent<MeshRenderer>().material = onTick;
 
@@ -71,7 +71,7 @@ public class Oven : MonoBehaviour
             pizzaCooking.GetComponent<Pizza>().recipe = tempRecipe;
         }
         yield return new WaitForSeconds(0.5f);
-        if (cooking)
+        if (cooking && pizzaCooking != null)
         {
             ovenLight.GetComponent<MeshRenderer>().material = on;
 

@@ -13,7 +13,6 @@ public class Customer : MonoBehaviour
 
     Recipe desired;
     public int queuePosition;
-    public int waitPosition;
     public bool ordering = false;
     public bool waiting = false;
     public bool moving = false;
@@ -62,7 +61,7 @@ public class Customer : MonoBehaviour
     public void GiveOrder()
     {
         Debug.Log("Gave order");
-        if (waitPosition == 0 && waiting)
+        if (queuePosition == 0 && waiting)
         {
             GameManager.Instance.PopCustomer(false);
             waiting = false;

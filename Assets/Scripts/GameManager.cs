@@ -16,13 +16,18 @@ public class GameManager : MonoBehaviour
 
     public List<GameObject> customers;
     public int score = 0;
+    public int currentWave = 1;
+    public int customersServed = 0;
+
+    public float speed = 2;
 
     public float waveStartTime;
     public float waveDuration;
     public List<float> entranceTimes;
     public int currentCustomer = 0;
 
-    bool waveEnd = false;
+    public int customersLeft = 0;
+    public bool running = false;
 
     public CustomerQueue orderingQueue;
     public CustomerQueue waitingQueue;
@@ -70,7 +75,7 @@ public class GameManager : MonoBehaviour
             go.SetActive(false);
         }
 
-        GenerateWave(5);
+        
     }
 
     // Update is called once per frame
@@ -81,8 +86,9 @@ public class GameManager : MonoBehaviour
             //Debug.Log("Game Over");
         //}
 
-        if (!waveEnd && currentCustomer < customers.Count && Time.time > entranceTimes[currentCustomer])
+        if (currentCustomer < customers.Count && Time.time >= entranceTimes[currentCustomer] && running)
         {
+            Debug.Log(currentWave + ": Current " + currentCustomer);
             customers[currentCustomer].transform.position = customerStartPosition.transform.position;
             orderingQueue.Enqueue(customers[currentCustomer].GetComponent<Customer>());
             Customer customer = customers[currentCustomer].GetComponent<Customer>();
@@ -90,8 +96,30 @@ public class GameManager : MonoBehaviour
             currentCustomer++;
         }
 
-        orderingQueue.UpdatePositions();
-        waitingQueue.UpdatePositions();
+        if (customersLeft <= 0 && running)
+        {
+            running = false;
+            currentWave++;
+            UIManager.Instance.UpdateUI();
+            UIManager.Instance.ShowUI(true);
+
+            currentCustomer = 0;
+            orderingQueue.Clear();
+            waitingQueue.Clear();
+            Debug.Log("LEFT IN ORDER QUEUE " + orderingQueue.Count());
+        } else
+        {
+            orderingQueue.UpdatePositions();
+            waitingQueue.UpdatePositions();
+        }
+
+        
+    }
+
+    public void StartWave()
+    {
+        GenerateWave(currentWave);
+        running = true;
     }
 
     public void PopCustomer(bool ordering)
@@ -107,6 +135,9 @@ public class GameManager : MonoBehaviour
             customer = waitingQueue.Dequeue();
             Debug.Log("thanks....");
             customer.Leave();
+
+            customersServed++;
+            customersLeft--;
         }
     }
 
@@ -126,6 +157,7 @@ public class GameManager : MonoBehaviour
             customerGO.transform.position = new Vector3(0, -100, 0);
             customerGO.transform.parent = transform;
             customers.Add(customerGO);
+            customersLeft++;
         }
 
         entranceTimes = new List<float>(customers.Count);
@@ -141,7 +173,7 @@ public class GameManager : MonoBehaviour
 
     bool IsWaveOver()
     {
-        return customers.Count == 0;
+        return customersLeft <= 0;
     }
 
     public void SubmitPizza(GameObject pizza)
@@ -156,6 +188,8 @@ public class GameManager : MonoBehaviour
             customer.GiveOrder();
 
             stressMeter.SetSlider(-customerScore / 10);
+
+            Debug.Log("Score: " + customerScore);
         }
 
     }

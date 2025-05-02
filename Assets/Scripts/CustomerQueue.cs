@@ -8,12 +8,22 @@ public class CustomerQueue
     public List<GameObject> queuePositions;
     public GameObject queueEnd;
 
-    public int speed = 2;
     public float overflowDistance = 1.5f;
 
     public CustomerQueue()
     {
         queue = new Queue<Customer>();
+    }
+
+    public void Clear()
+    {
+        queue.Clear();
+        
+    }
+
+    public int Count()
+    {
+        return queue.Count;
     }
 
     public Customer front()
@@ -27,10 +37,10 @@ public class CustomerQueue
     public void Enqueue(Customer customer)
     {
         queue.Enqueue(customer);
+        customer.queuePosition = queue.Count - 1;
 
         if (queue.Count <= queuePositions.Count)
         {
-            customer.queuePosition = queue.Count - 1;
 
             // Move customer to the end of the queue
             List<Vector3> positions = new List<Vector3>();
@@ -40,17 +50,15 @@ public class CustomerQueue
             Vector3 queuePosition = queuePositions[customer.queuePosition].transform.position;
             positions.Add(queuePosition);
 
-            customer.StartCoroutine(customer.MoveToQueue(positions, speed));
+            customer.StartCoroutine(customer.MoveToQueue(positions, GameManager.Instance.speed));
         } else
         {
-            customer.queuePosition = queue.Count - 1;
-
             // Move customer to the end of the queue
             List<Vector3> positions = new List<Vector3>();
             Vector3 end = queueEnd.transform.position - new Vector3(0, 0, (customer.queuePosition - queue.Count) * overflowDistance);
             positions.Add(end);
 
-            customer.StartCoroutine(customer.MoveToQueue(positions, speed));
+            customer.StartCoroutine(customer.MoveToQueue(positions, GameManager.Instance.speed));
         }
 
         
@@ -68,8 +76,14 @@ public class CustomerQueue
         return popped;
     }
 
+    public bool Contains(Customer customer)
+    {
+        return queue.Contains(customer);
+    }
+
     public void UpdatePositions()
     {
+        int count = 0;
         foreach (Customer c in queue)
         {
             List<Vector3> positions = new List<Vector3>();
@@ -88,7 +102,7 @@ public class CustomerQueue
                 positions.Add(end);
             }
 
-            c.StartCoroutine(c.MoveToQueue(positions, speed));
+            c.StartCoroutine(c.MoveToQueue(positions, GameManager.Instance.speed));
 
         }
     }
