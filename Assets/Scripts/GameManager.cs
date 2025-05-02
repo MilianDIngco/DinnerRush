@@ -90,8 +90,6 @@ public class GameManager : MonoBehaviour
         {
             go.SetActive(false);
         }
-
-        GenerateWave(5);
     }
 
     // Update is called once per frame
@@ -162,6 +160,8 @@ public class GameManager : MonoBehaviour
                     seatAvailable = true;
                 }
             }
+
+            customersLeft--;
             if (seatAvailable)
             {
                 customer = waitingQueue.Dequeue();
@@ -169,7 +169,6 @@ public class GameManager : MonoBehaviour
                 Debug.Log("thanks....");
                 customer.cui.ShowCanvas(false);
                 StartCoroutine(Leave());
-                customersLeft--;
                 customersServed++;
                 return true;
             }
