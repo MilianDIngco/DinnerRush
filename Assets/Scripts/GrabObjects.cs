@@ -42,7 +42,8 @@ public class GrabObjects : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, 2.5f))
             {
-                if (hit.collider.gameObject.tag == "Ingredient" || hit.collider.gameObject.tag == "Pizza" || hit.collider.gameObject.tag == "PizzaCutter") {
+                if (hit.collider.gameObject.tag == "Ingredient" || hit.collider.gameObject.tag == "Pizza" || hit.collider.gameObject.tag == "PizzaCutter")
+                {
                     holding = true;
                     holdingObjectHand = hit.collider.gameObject;
                     holdingObjectHand.transform.SetParent(hand.transform);
@@ -75,6 +76,10 @@ public class GrabObjects : MonoBehaviour
                     Customer customer = hit.collider.gameObject.GetComponent<Customer>();
                     if (customer.ordering)
                         customer.TakeOrder();
+                }
+                else if (hit.collider != null && hit.collider.gameObject.tag == "Table")
+                {
+                    hit.collider.gameObject.GetComponent<Table>().Bus();
                 }
             }
         }
